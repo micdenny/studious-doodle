@@ -88,7 +88,7 @@ const LiveMatches: React.FC = () => {
         </Box>
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ textAlign: 'center', p: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
               <Typography variant="body2" color="text.secondary">Home Win</Typography>
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -97,7 +97,7 @@ const LiveMatches: React.FC = () => {
             </Box>
           </Grid>
           {match.odds.draw && (
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ textAlign: 'center', p: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
                 <Typography variant="body2" color="text.secondary">Draw</Typography>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -106,7 +106,7 @@ const LiveMatches: React.FC = () => {
               </Box>
             </Grid>
           )}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ textAlign: 'center', p: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
               <Typography variant="body2" color="text.secondary">Away Win</Typography>
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -162,7 +162,7 @@ const LiveMatches: React.FC = () => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} lg={8}>
+        <Grid size={{ xs: 12, lg: 8 }}>
           <Box>
             {liveMatches.length === 0 ? (
               <Card>
@@ -183,7 +183,7 @@ const LiveMatches: React.FC = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} lg={4}>
+  <Grid size={{ xs: 12, lg: 4 }}>
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>

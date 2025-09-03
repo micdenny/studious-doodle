@@ -88,7 +88,7 @@ const PrematchMatches: React.FC = () => {
       </Box>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <TextField
             fullWidth
             variant="outlined"
@@ -104,7 +104,7 @@ const PrematchMatches: React.FC = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+  <Grid size={{ xs: 12, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel>League</InputLabel>
             <Select
@@ -124,7 +124,7 @@ const PrematchMatches: React.FC = () => {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} lg={9}>
+        <Grid size={{ xs: 12, lg: 9 }}>
           <Card>
             <TableContainer>
               <Table>
@@ -232,7 +232,7 @@ const PrematchMatches: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} lg={3}>
+  <Grid size={{ xs: 12, lg: 3 }}>
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>

@@ -164,7 +164,7 @@ const RiskManagement: React.FC = () => {
 
       {/* Risk Metrics Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <RiskCard
             title="Total Exposure"
             value={formatCurrency(riskMetrics.totalExposure)}
@@ -174,7 +174,7 @@ const RiskManagement: React.FC = () => {
             riskLevel={getRiskLevel(riskMetrics.totalExposure, 500000)}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <RiskCard
             title="Largest Payout"
             value={formatCurrency(riskMetrics.largestPayout)}
@@ -183,7 +183,7 @@ const RiskManagement: React.FC = () => {
             subtitle="Single largest potential payout"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <RiskCard
             title="Profit Margin"
             value={`${riskMetrics.profitMargin}%`}
@@ -193,7 +193,7 @@ const RiskManagement: React.FC = () => {
             riskLevel={riskMetrics.profitMargin > 15 ? 'low' : riskMetrics.profitMargin > 5 ? 'medium' : 'high'}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <RiskCard
             title="Active Matches"
             value={riskMetrics.activeMatches}
@@ -206,7 +206,7 @@ const RiskManagement: React.FC = () => {
 
       <Grid container spacing={3}>
         {/* High Risk Matches */}
-        <Grid item xs={12} lg={7}>
+        <Grid size={{ xs: 12, lg: 7 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
@@ -282,7 +282,7 @@ const RiskManagement: React.FC = () => {
         </Grid>
 
         {/* Risk Distribution */}
-        <Grid item xs={12} lg={5}>
+  <Grid size={{ xs: 12, lg: 5 }}>
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>

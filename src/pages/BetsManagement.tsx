@@ -77,13 +77,13 @@ const BetsManagement: React.FC = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string): React.ReactElement | undefined => {
     switch (status) {
       case 'won': return <CheckCircle />;
       case 'lost': return <Cancel />;
       case 'pending': return <Block />;
       case 'void': return <Block />;
-      default: return null;
+      default: return undefined;
     }
   };
 
@@ -115,7 +115,7 @@ const BetsManagement: React.FC = () => {
       </Box>
 
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
@@ -127,7 +127,7 @@ const BetsManagement: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'success.main' }}>
@@ -139,7 +139,7 @@ const BetsManagement: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'warning.main' }}>
@@ -151,7 +151,7 @@ const BetsManagement: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography 
@@ -172,7 +172,7 @@ const BetsManagement: React.FC = () => {
       </Grid>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <TextField
             fullWidth
             variant="outlined"
@@ -188,7 +188,7 @@ const BetsManagement: React.FC = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select

@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
       </Typography>
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Matches"
             value={stats.totalMatches}
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
             trend={12}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Bets"
             value={stats.totalBets.toLocaleString()}
@@ -134,7 +134,7 @@ const Dashboard: React.FC = () => {
             trend={8}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Stake"
             value={formatCurrency(stats.totalStake)}
@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
             trend={15}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Profit"
             value={formatCurrency(stats.totalProfit)}
@@ -157,7 +157,7 @@ const Dashboard: React.FC = () => {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -208,7 +208,7 @@ const Dashboard: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+  <Grid size={{ xs: 12, md: 4 }}>
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
