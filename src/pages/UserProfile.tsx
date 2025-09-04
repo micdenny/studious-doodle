@@ -74,9 +74,9 @@ const UserProfile: React.FC = () => {
 
   const getRoleLabel = (role: UserRole): string => {
     switch (role) {
-      case 'admin': return 'Amministratore';
-      case 'user': return 'Utente';
-      case 'guest': return 'Ospite';
+      case 'admin': return 'Administrator';
+      case 'user': return 'User';
+      case 'guest': return 'Guest';
     }
   };
 
@@ -119,7 +119,7 @@ const UserProfile: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4 }}>
-        Il Mio Profilo
+        My Profile
       </Typography>
 
       <Grid container spacing={3}>
@@ -129,7 +129,7 @@ const UserProfile: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
                 <Typography variant="h6">
-                  Informazioni Personali
+                  Personal Information
                 </Typography>
                 {!editing ? (
                   <Button
@@ -138,7 +138,7 @@ const UserProfile: React.FC = () => {
                     onClick={handleEdit}
                     size="small"
                   >
-                    Modifica
+                    Edit
                   </Button>
                 ) : (
                   <Box sx={{ display: 'flex', gap: 1 }}>
@@ -148,7 +148,7 @@ const UserProfile: React.FC = () => {
                       onClick={handleSave}
                       size="small"
                     >
-                      Salva
+                      Save
                     </Button>
                     <Button
                       variant="outlined"
@@ -156,7 +156,7 @@ const UserProfile: React.FC = () => {
                       onClick={handleCancel}
                       size="small"
                     >
-                      Annulla
+                      Cancel
                     </Button>
                   </Box>
                 )}
@@ -201,13 +201,13 @@ const UserProfile: React.FC = () => {
                   <>
                     <TextField
                       fullWidth
-                      label="Nome"
+                      label="First Name"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     />
                     <TextField
                       fullWidth
-                      label="Cognome"
+                      label="Last Name"
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     />
@@ -225,7 +225,7 @@ const UserProfile: React.FC = () => {
                       <PersonIcon sx={{ mr: 2, color: 'text.secondary' }} />
                       <Box>
                         <Typography variant="body2" color="text.secondary">
-                          Nome Completo
+                          Full Name
                         </Typography>
                         <Typography variant="body1">
                           {currentUser.firstName} {currentUser.lastName}
@@ -251,10 +251,10 @@ const UserProfile: React.FC = () => {
 
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  Membro dal
+                  Member since
                 </Typography>
                 <Typography variant="body1">
-                  {currentUser.createdAt.toLocaleDateString('it-IT', {
+                  {currentUser.createdAt.toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
@@ -265,10 +265,10 @@ const UserProfile: React.FC = () => {
               {currentUser.lastLogin && (
                 <Box sx={{ mt: 2 }}>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                    Ultimo accesso
+                    Last access
                   </Typography>
                   <Typography variant="body1">
-                    {currentUser.lastLogin.toLocaleDateString('it-IT', {
+                    {currentUser.lastLogin.toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric',
@@ -289,12 +289,12 @@ const UserProfile: React.FC = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <SecurityIcon sx={{ mr: 2, color: 'primary.main' }} />
                 <Typography variant="h6">
-                  I Miei Permessi
+                  My Permissions
                 </Typography>
               </Box>
 
               <Alert severity="info" sx={{ mb: 3 }}>
-                I tuoi permessi determinano quali funzionalità dell'applicazione puoi utilizzare.
+                Your permissions determine which application features you can use.
               </Alert>
 
               <List>
@@ -331,7 +331,7 @@ const UserProfile: React.FC = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert onClose={() => setShowSuccess(false)} severity="success">
-          Profilo aggiornato con successo!
+          Profile updated successfully!
         </Alert>
       </Snackbar>
     </Box>

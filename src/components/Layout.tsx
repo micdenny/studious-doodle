@@ -45,11 +45,11 @@ const menuItems = [
   { text: 'Prematch Matches', icon: <PrematchIcon />, path: '/prematch-matches' },
   { text: 'Bets Management', icon: <BetsIcon />, path: '/bets' },
   { text: 'Risk Management', icon: <RiskIcon />, path: '/risk-management' },
-  { text: 'Gestione Utenti', icon: <UsersIcon />, path: '/users' },
+  { text: 'User Management', icon: <UsersIcon />, path: '/users' },
 ];
 
 const profileItems = [
-  { text: 'Il Mio Profilo', icon: <ProfileIcon />, path: '/profile' },
+  { text: 'My Profile', icon: <ProfileIcon />, path: '/profile' },
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

@@ -206,14 +206,14 @@ const UserManagement: React.FC = () => {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Typography variant="h4" component="h1">
-          Gestione Utenti
+          User Management
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => handleOpenDialog()}
         >
-          Nuovo Utente
+          New User
         </Button>
       </Box>
 
@@ -226,7 +226,7 @@ const UserManagement: React.FC = () => {
                 {userStats.total}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Totale Utenti
+                Total Users
               </Typography>
             </CardContent>
           </Card>
@@ -238,7 +238,7 @@ const UserManagement: React.FC = () => {
                 {userStats.active}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Attivi
+                Active
               </Typography>
             </CardContent>
           </Card>
@@ -250,7 +250,7 @@ const UserManagement: React.FC = () => {
                 {userStats.admins}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Amministratori
+                Administrators
               </Typography>
             </CardContent>
           </Card>
@@ -262,7 +262,7 @@ const UserManagement: React.FC = () => {
                 {userStats.users}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Utenti
+                Users
               </Typography>
             </CardContent>
           </Card>
@@ -274,7 +274,7 @@ const UserManagement: React.FC = () => {
                 {userStats.guests}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Ospiti
+                Guests
               </Typography>
             </CardContent>
           </Card>
@@ -286,7 +286,7 @@ const UserManagement: React.FC = () => {
                 {userStats.inactive}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Inattivi
+                Inactive
               </Typography>
             </CardContent>
           </Card>
@@ -297,18 +297,18 @@ const UserManagement: React.FC = () => {
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Lista Utenti
+            User List
           </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Utente</TableCell>
+                  <TableCell>User</TableCell>
                   <TableCell>Email</TableCell>
-                  <TableCell>Ruolo</TableCell>
-                  <TableCell>Stato</TableCell>
-                  <TableCell>Ultimo Accesso</TableCell>
-                  <TableCell align="center">Azioni</TableCell>
+                  <TableCell>Role</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Last Access</TableCell>
+                  <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -345,7 +345,7 @@ const UserManagement: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={user.isActive ? 'Attivo' : 'Inattivo'}
+                        label={user.isActive ? 'Active' : 'Inactive'}
                         color={user.isActive ? 'success' : 'default'}
                         size="small"
                       />
@@ -355,17 +355,17 @@ const UserManagement: React.FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <LoginIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
                           <Typography variant="body2">
-                            {user.lastLogin.toLocaleDateString('it-IT')}
+                            {user.lastLogin.toLocaleDateString('en-US')}
                           </Typography>
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary">
-                          Mai
+                          Never
                         </Typography>
                       )}
                     </TableCell>
                     <TableCell align="center">
-                      <Tooltip title="Modifica">
+                      <Tooltip title="Edit">
                         <IconButton
                           size="small"
                           onClick={() => handleOpenDialog(user)}
@@ -373,7 +373,7 @@ const UserManagement: React.FC = () => {
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Elimina">
+                      <Tooltip title="Delete">
                         <IconButton
                           size="small"
                           color="error"
@@ -399,7 +399,7 @@ const UserManagement: React.FC = () => {
         fullWidth
       >
         <DialogTitle>
-          {editingUser ? 'Modifica Utente' : 'Nuovo Utente'}
+          {editingUser ? 'Edit User' : 'New User'}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 2 }}>
@@ -407,7 +407,7 @@ const UserManagement: React.FC = () => {
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
-                  label="Nome"
+                  label="First Name"
                   value={formData.firstName || ''}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                 />
@@ -415,7 +415,7 @@ const UserManagement: React.FC = () => {
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
-                  label="Cognome"
+                  label="Last Name"
                   value={formData.lastName || ''}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                 />
@@ -439,15 +439,15 @@ const UserManagement: React.FC = () => {
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth>
-                  <InputLabel>Ruolo</InputLabel>
+                  <InputLabel>Role</InputLabel>
                   <Select
                     value={formData.role || 'user'}
-                    label="Ruolo"
+                    label="Role"
                     onChange={(e) => handleRoleChange(e.target.value as UserRole)}
                   >
-                    <MenuItem value="admin">Amministratore</MenuItem>
-                    <MenuItem value="user">Utente</MenuItem>
-                    <MenuItem value="guest">Ospite</MenuItem>
+                    <MenuItem value="admin">Administrator</MenuItem>
+                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="guest">Guest</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -459,12 +459,12 @@ const UserManagement: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                     />
                   }
-                  label="Utente Attivo"
+                  label="Active User"
                 />
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>
-                  Permessi
+                  Permissions
                 </Typography>
                 <FormGroup>
                   {availablePermissions.map((permission) => (
@@ -492,9 +492,9 @@ const UserManagement: React.FC = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Annulla</Button>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
           <Button onClick={handleSaveUser} variant="contained">
-            {editingUser ? 'Aggiorna' : 'Crea'}
+            {editingUser ? 'Update' : 'Create'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -504,20 +504,20 @@ const UserManagement: React.FC = () => {
         open={!!deleteConfirm}
         onClose={() => setDeleteConfirm(null)}
       >
-        <DialogTitle>Conferma Eliminazione</DialogTitle>
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <Alert severity="warning">
-            Sei sicuro di voler eliminare questo utente? Questa azione non può essere annullata.
+            Are you sure you want to delete this user? This action cannot be undone.
           </Alert>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteConfirm(null)}>Annulla</Button>
+          <Button onClick={() => setDeleteConfirm(null)}>Cancel</Button>
           <Button
             onClick={() => deleteConfirm && handleDeleteUser(deleteConfirm)}
             color="error"
             variant="contained"
           >
-            Elimina
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
