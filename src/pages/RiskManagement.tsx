@@ -213,16 +213,16 @@ const RiskManagement: React.FC = () => {
                 <Warning sx={{ mr: 1, color: 'error.main' }} />
                 High Risk Matches
               </Typography>
-              <TableContainer>
-                <Table size="small">
+              <TableContainer sx={{ overflowX: 'auto' }}>
+                <Table size="small" sx={{ minWidth: 600 }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Match</TableCell>
-                      <TableCell>League</TableCell>
-                      <TableCell align="center">Exposure</TableCell>
-                      <TableCell align="center">Bets</TableCell>
-                      <TableCell align="center">Risk Level</TableCell>
-                      <TableCell align="center">Action</TableCell>
+                      <TableCell sx={{ minWidth: 200 }}>Match</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>League</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 100 }}>Exposure</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 80 }}>Bets</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 100 }}>Risk Level</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 100 }}>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

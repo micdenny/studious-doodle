@@ -126,18 +126,18 @@ const PrematchMatches: React.FC = () => {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 9 }}>
           <Card>
-            <TableContainer>
-              <Table>
+            <TableContainer sx={{ overflowX: 'auto' }}>
+              <Table sx={{ minWidth: 800 }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Match</TableCell>
-                    <TableCell>League</TableCell>
-                    <TableCell>Start Time</TableCell>
-                    <TableCell align="center">Odds</TableCell>
-                    <TableCell align="center">Bets</TableCell>
-                    <TableCell align="center">Stake</TableCell>
-                    <TableCell align="center">Risk</TableCell>
-                    <TableCell align="center">Actions</TableCell>
+                    <TableCell sx={{ minWidth: 200 }}>Match</TableCell>
+                    <TableCell sx={{ minWidth: 120 }}>League</TableCell>
+                    <TableCell sx={{ minWidth: 140 }}>Start Time</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 120 }}>Odds</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 80 }}>Bets</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 100 }}>Stake</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 80 }}>Risk</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 120 }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
