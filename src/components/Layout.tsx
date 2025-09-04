@@ -27,6 +27,7 @@ import {
   SportsSoccer as SoccerIcon,
   DarkMode,
   LightMode,
+  People as UsersIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ColorModeContext } from '../App';
@@ -43,6 +44,7 @@ const menuItems = [
   { text: 'Prematch Matches', icon: <PrematchIcon />, path: '/prematch-matches' },
   { text: 'Bets Management', icon: <BetsIcon />, path: '/bets' },
   { text: 'Risk Management', icon: <RiskIcon />, path: '/risk-management' },
+  { text: 'Gestione Utenti', icon: <UsersIcon />, path: '/users' },
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

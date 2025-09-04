@@ -11,6 +11,7 @@ import LiveMatches from './pages/LiveMatches';
 import PrematchMatches from './pages/PrematchMatches';
 import BetsManagement from './pages/BetsManagement';
 import RiskManagement from './pages/RiskManagement';
+import UserManagement from './pages/UserManagement';
 import { getAppTheme } from './theme';
 import { useEffect } from 'react';
 
@@ -33,7 +34,8 @@ const RouteTransitions: React.FC = () => {
           <Route path="/live-matches" element={<LiveMatches />} />
           <Route path="/prematch-matches" element={<PrematchMatches />} />
           <Route path="/bets" element={<BetsManagement />} />
-            <Route path="/risk-management" element={<RiskManagement />} />
+          <Route path="/risk-management" element={<RiskManagement />} />
+          <Route path="/users" element={<UserManagement />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
