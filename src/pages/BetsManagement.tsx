@@ -21,6 +21,8 @@ import {
   TableRow,
   IconButton,
   Tooltip,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Search,
@@ -36,6 +38,8 @@ const BetsManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [bets] = useState(() => generateMockBets(generateMockMatches(30), 200));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const filteredBets = useMemo(() => {
     return bets
@@ -102,6 +106,75 @@ const BetsManagement: React.FC = () => {
       lostBets: bets.filter(bet => bet.status === 'lost').length,
     };
   }, [bets]);
+
+  // Mobile card component for bet display
+  const BetCard: React.FC<{ bet: any }> = ({ bet }) => (
+    <Card sx={{ mb: 2 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+            {bet.id}
+          </Typography>
+          <Chip 
+            label={bet.status.toUpperCase()}
+            color={getStatusColor(bet.status) as any}
+            size="small"
+            icon={getStatusIcon(bet.status)}
+          />
+        </Box>
+        
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
+            User: {bet.userId}
+          </Typography>
+        </Box>
+
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'medium' }}>
+            {bet.selection}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {bet.betType}
+          </Typography>
+        </Box>
+
+        <Grid container spacing={1} sx={{ mb: 1 }}>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Odds</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {bet.odds.toFixed(2)}
+            </Typography>
+          </Grid>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Stake</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {formatCurrency(bet.stake)}
+            </Typography>
+          </Grid>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Potential Win</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {formatCurrency(bet.potentialWin)}
+            </Typography>
+          </Grid>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Placed</Typography>
+            <Typography variant="body2">
+              {formatDateTime(bet.placedAt)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Tooltip title="View Details">
+            <IconButton size="small">
+              <Visibility />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box>
@@ -207,97 +280,118 @@ const BetsManagement: React.FC = () => {
       </Grid>
 
       <Card>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Bet ID</TableCell>
-                <TableCell>User</TableCell>
-                <TableCell>Selection</TableCell>
-                <TableCell align="center">Odds</TableCell>
-                <TableCell align="center">Stake</TableCell>
-                <TableCell align="center">Potential Win</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Placed</TableCell>
-                <TableCell align="center">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredBets.length === 0 ? (
+        {isMobile ? (
+          // Mobile card layout
+          <Box sx={{ p: 2 }}>
+            {filteredBets.length === 0 ? (
+              <Box sx={{ textAlign: 'center', py: 4 }}>
+                <Typography variant="h6" color="text.secondary">
+                  No bets found
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  Try adjusting your search criteria
+                </Typography>
+              </Box>
+            ) : (
+              filteredBets.slice(0, 50).map((bet) => (
+                <BetCard key={bet.id} bet={bet} />
+              ))
+            )}
+          </Box>
+        ) : (
+          // Desktop table layout
+          <TableContainer sx={{ overflowX: 'auto' }}>
+            <Table sx={{ minWidth: 800 }}>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
-                    <Typography variant="h6" color="text.secondary">
-                      No bets found
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                      Try adjusting your search criteria
-                    </Typography>
-                  </TableCell>
+                  <TableCell sx={{ minWidth: 100 }}>Bet ID</TableCell>
+                  <TableCell sx={{ minWidth: 100 }}>User</TableCell>
+                  <TableCell sx={{ minWidth: 150 }}>Selection</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 80 }}>Odds</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 100 }}>Stake</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 120 }}>Potential Win</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 100 }}>Status</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 120 }}>Placed</TableCell>
+                  <TableCell align="center" sx={{ minWidth: 80 }}>Actions</TableCell>
                 </TableRow>
-              ) : (
-                filteredBets.slice(0, 50).map((bet) => (
-                  <TableRow key={bet.id} hover>
-                    <TableCell>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                        {bet.id}
+              </TableHead>
+              <TableBody>
+                {filteredBets.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
+                      <Typography variant="h6" color="text.secondary">
+                        No bets found
                       </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {bet.userId}
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                        Try adjusting your search criteria
                       </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 'medium' }}>
-                          {bet.selection}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {bet.betType}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                        {bet.odds.toFixed(2)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                        {formatCurrency(bet.stake)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                        {formatCurrency(bet.potentialWin)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Chip 
-                        label={bet.status.toUpperCase()}
-                        color={getStatusColor(bet.status) as any}
-                        size="small"
-                        icon={getStatusIcon(bet.status)}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography variant="body2">
-                        {formatDateTime(bet.placedAt)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip title="View Details">
-                        <IconButton size="small">
-                          <Visibility />
-                        </IconButton>
-                      </Tooltip>
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                ) : (
+                  filteredBets.slice(0, 50).map((bet) => (
+                    <TableRow key={bet.id} hover>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                          {bet.id}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {bet.userId}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 'medium' }}>
+                            {bet.selection}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {bet.betType}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                          {bet.odds.toFixed(2)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                          {formatCurrency(bet.stake)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                          {formatCurrency(bet.potentialWin)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Chip 
+                          label={bet.status.toUpperCase()}
+                          color={getStatusColor(bet.status) as any}
+                          size="small"
+                          icon={getStatusIcon(bet.status)}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="body2">
+                          {formatDateTime(bet.placedAt)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Tooltip title="View Details">
+                          <IconButton size="small">
+                            <Visibility />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
         {filteredBets.length > 50 && (
           <Box sx={{ p: 2, textAlign: 'center' }}>
             <Typography variant="body2" color="text.secondary">

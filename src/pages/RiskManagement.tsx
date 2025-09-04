@@ -16,6 +16,8 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   TrendingUp,
@@ -30,6 +32,8 @@ const RiskManagement: React.FC = () => {
   const [matches] = useState(() => generateMockMatches(30));
   const [bets] = useState(() => generateMockBets(generateMockMatches(30), 200));
   const riskMetrics = useMemo(() => generateRiskMetrics(matches, bets), [matches, bets]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -135,6 +139,52 @@ const RiskManagement: React.FC = () => {
     </Card>
   );
 
+  // Mobile card component for high risk matches
+  const HighRiskMatchCard: React.FC<{ match: any }> = ({ match }) => (
+    <Card sx={{ mb: 2 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 'medium', lineHeight: 1.2 }}>
+              {match.homeTeam} vs {match.awayTeam}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {match.league}
+            </Typography>
+          </Box>
+          <Chip 
+            label={match.riskLevel.toUpperCase()}
+            color={getRiskColor(match.riskLevel) as any}
+            size="small"
+          />
+        </Box>
+        
+        <Grid container spacing={1} sx={{ mb: 2 }}>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Exposure</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {formatCurrency(riskMetrics.riskByMatch[match.id] || 0)}
+            </Typography>
+          </Grid>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Bets</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {match.totalBets}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Tooltip title="Suspend betting">
+            <IconButton size="small" color="error">
+              <Block />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <Box>
       <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4 }}>
@@ -213,70 +263,88 @@ const RiskManagement: React.FC = () => {
                 <Warning sx={{ mr: 1, color: 'error.main' }} />
                 High Risk Matches
               </Typography>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Match</TableCell>
-                      <TableCell>League</TableCell>
-                      <TableCell align="center">Exposure</TableCell>
-                      <TableCell align="center">Bets</TableCell>
-                      <TableCell align="center">Risk Level</TableCell>
-                      <TableCell align="center">Action</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {highRiskMatches.length === 0 ? (
+              {isMobile ? (
+                // Mobile card layout
+                <Box sx={{ mt: 2 }}>
+                  {highRiskMatches.length === 0 ? (
+                    <Box sx={{ textAlign: 'center', py: 3 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        No high risk matches currently
+                      </Typography>
+                    </Box>
+                  ) : (
+                    highRiskMatches.map((match) => (
+                      <HighRiskMatchCard key={match.id} match={match} />
+                    ))
+                  )}
+                </Box>
+              ) : (
+                // Desktop table layout
+                <TableContainer sx={{ overflowX: 'auto' }}>
+                  <Table size="small" sx={{ minWidth: 600 }}>
+                    <TableHead>
                       <TableRow>
-                        <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
-                          <Typography variant="body2" color="text.secondary">
-                            No high risk matches currently
-                          </Typography>
-                        </TableCell>
+                        <TableCell sx={{ minWidth: 200 }}>Match</TableCell>
+                        <TableCell sx={{ minWidth: 120 }}>League</TableCell>
+                        <TableCell align="center" sx={{ minWidth: 100 }}>Exposure</TableCell>
+                        <TableCell align="center" sx={{ minWidth: 80 }}>Bets</TableCell>
+                        <TableCell align="center" sx={{ minWidth: 100 }}>Risk Level</TableCell>
+                        <TableCell align="center" sx={{ minWidth: 100 }}>Action</TableCell>
                       </TableRow>
-                    ) : (
-                      highRiskMatches.map((match) => (
-                        <TableRow key={match.id} hover>
-                          <TableCell>
-                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                              {match.homeTeam} vs {match.awayTeam}
+                    </TableHead>
+                    <TableBody>
+                      {highRiskMatches.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
+                            <Typography variant="body2" color="text.secondary">
+                              No high risk matches currently
                             </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="body2">
-                              {match.league}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                              {formatCurrency(riskMetrics.riskByMatch[match.id] || 0)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Typography variant="body2">
-                              {match.totalBets}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Chip 
-                              label={match.riskLevel.toUpperCase()}
-                              color={getRiskColor(match.riskLevel) as any}
-                              size="small"
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <Tooltip title="Suspend betting">
-                              <IconButton size="small" color="error">
-                                <Block />
-                              </IconButton>
-                            </Tooltip>
                           </TableCell>
                         </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                      ) : (
+                        highRiskMatches.map((match) => (
+                          <TableRow key={match.id} hover>
+                            <TableCell>
+                              <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                {match.homeTeam} vs {match.awayTeam}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {match.league}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                {formatCurrency(riskMetrics.riskByMatch[match.id] || 0)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography variant="body2">
+                                {match.totalBets}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Chip 
+                                label={match.riskLevel.toUpperCase()}
+                                color={getRiskColor(match.riskLevel) as any}
+                                size="small"
+                              />
+                            </TableCell>
+                            <TableCell align="center">
+                              <Tooltip title="Suspend betting">
+                                <IconButton size="small" color="error">
+                                  <Block />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </CardContent>
           </Card>
         </Grid>

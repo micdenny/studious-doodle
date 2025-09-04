@@ -19,6 +19,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Search,
@@ -32,6 +34,8 @@ const PrematchMatches: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [leagueFilter, setLeagueFilter] = useState('');
   const [matches] = useState(() => generateMockMatches(40));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const prematchMatches = useMemo(() => {
     return matches
@@ -75,6 +79,82 @@ const PrematchMatches: React.FC = () => {
       default: return 'primary';
     }
   };
+
+  // Mobile card component for match display
+  const MatchCard: React.FC<{ match: any }> = ({ match }) => (
+    <Card sx={{ mb: 2 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'medium', lineHeight: 1.2 }}>
+              {match.homeTeam} vs {match.awayTeam}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {match.league}
+            </Typography>
+          </Box>
+          <Chip 
+            label={match.riskLevel.toUpperCase()}
+            color={getRiskColor(match.riskLevel) as any}
+            size="small"
+          />
+        </Box>
+        
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
+            {formatDateTime(match.startTime)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1, mb: 2, justifyContent: 'center' }}>
+          <Chip 
+            label={match.odds.home} 
+            size="small" 
+            variant="outlined"
+            sx={{ minWidth: 45 }}
+          />
+          {match.odds.draw && (
+            <Chip 
+              label={match.odds.draw} 
+              size="small" 
+              variant="outlined"
+              sx={{ minWidth: 45 }}
+            />
+          )}
+          <Chip 
+            label={match.odds.away} 
+            size="small" 
+            variant="outlined"
+            sx={{ minWidth: 45 }}
+          />
+        </Box>
+
+        <Grid container spacing={1} sx={{ mb: 2 }}>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Bets</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {match.totalBets}
+            </Typography>
+          </Grid>
+          <Grid size={6}>
+            <Typography variant="caption" color="text.secondary">Stake</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              {formatCurrency(match.totalStake)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+          <Button size="small" startIcon={<Visibility />} sx={{ minWidth: 44 }}>
+            View
+          </Button>
+          <Button size="small" startIcon={<Edit />} sx={{ minWidth: 44 }}>
+            Edit
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box>
@@ -126,109 +206,130 @@ const PrematchMatches: React.FC = () => {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 9 }}>
           <Card>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Match</TableCell>
-                    <TableCell>League</TableCell>
-                    <TableCell>Start Time</TableCell>
-                    <TableCell align="center">Odds</TableCell>
-                    <TableCell align="center">Bets</TableCell>
-                    <TableCell align="center">Stake</TableCell>
-                    <TableCell align="center">Risk</TableCell>
-                    <TableCell align="center">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {prematchMatches.length === 0 ? (
+            {isMobile ? (
+              // Mobile card layout
+              <Box sx={{ p: 2 }}>
+                {prematchMatches.length === 0 ? (
+                  <Box sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography variant="h6" color="text.secondary">
+                      No prematch matches found
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                      Try adjusting your search criteria
+                    </Typography>
+                  </Box>
+                ) : (
+                  prematchMatches.map((match) => (
+                    <MatchCard key={match.id} match={match} />
+                  ))
+                )}
+              </Box>
+            ) : (
+              // Desktop table layout
+              <TableContainer sx={{ overflowX: 'auto' }}>
+                <Table sx={{ minWidth: 800 }}>
+                  <TableHead>
                     <TableRow>
-                      <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
-                        <Typography variant="h6" color="text.secondary">
-                          No prematch matches found
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                          Try adjusting your search criteria
-                        </Typography>
-                      </TableCell>
+                      <TableCell sx={{ minWidth: 200 }}>Match</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>League</TableCell>
+                      <TableCell sx={{ minWidth: 140 }}>Start Time</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 120 }}>Odds</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 80 }}>Bets</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 100 }}>Stake</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 80 }}>Risk</TableCell>
+                      <TableCell align="center" sx={{ minWidth: 120 }}>Actions</TableCell>
                     </TableRow>
-                  ) : (
-                    prematchMatches.map((match) => (
-                      <TableRow key={match.id} hover>
-                        <TableCell>
-                          <Box>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 'medium' }}>
-                              {match.homeTeam} vs {match.awayTeam}
+                  </TableHead>
+                  <TableBody>
+                    {prematchMatches.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
+                          <Typography variant="h6" color="text.secondary">
+                            No prematch matches found
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                            Try adjusting your search criteria
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      prematchMatches.map((match) => (
+                        <TableRow key={match.id} hover>
+                          <TableCell>
+                            <Box>
+                              <Typography variant="subtitle2" sx={{ fontWeight: 'medium' }}>
+                                {match.homeTeam} vs {match.awayTeam}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {match.league}
                             </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2">
-                            {match.league}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2">
-                            {formatDateTime(match.startTime)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                            <Chip 
-                              label={match.odds.home} 
-                              size="small" 
-                              variant="outlined"
-                              sx={{ minWidth: 45 }}
-                            />
-                            {match.odds.draw && (
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {formatDateTime(match.startTime)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                               <Chip 
-                                label={match.odds.draw} 
+                                label={match.odds.home} 
                                 size="small" 
                                 variant="outlined"
                                 sx={{ minWidth: 45 }}
                               />
-                            )}
+                              {match.odds.draw && (
+                                <Chip 
+                                  label={match.odds.draw} 
+                                  size="small" 
+                                  variant="outlined"
+                                  sx={{ minWidth: 45 }}
+                                />
+                              )}
+                              <Chip 
+                                label={match.odds.away} 
+                                size="small" 
+                                variant="outlined"
+                                sx={{ minWidth: 45 }}
+                              />
+                            </Box>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                              {match.totalBets}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                              {formatCurrency(match.totalStake)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
                             <Chip 
-                              label={match.odds.away} 
-                              size="small" 
-                              variant="outlined"
-                              sx={{ minWidth: 45 }}
+                              label={match.riskLevel.toUpperCase()}
+                              color={getRiskColor(match.riskLevel) as any}
+                              size="small"
                             />
-                          </Box>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                            {match.totalBets}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                            {formatCurrency(match.totalStake)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Chip 
-                            label={match.riskLevel.toUpperCase()}
-                            color={getRiskColor(match.riskLevel) as any}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                            <Button size="small" startIcon={<Visibility />}>
-                              View
-                            </Button>
-                            <Button size="small" startIcon={<Edit />}>
-                              Edit
-                            </Button>
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                              <Button size="small" startIcon={<Visibility />}>
+                                View
+                              </Button>
+                              <Button size="small" startIcon={<Edit />}>
+                                Edit
+                              </Button>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </Card>
         </Grid>
 

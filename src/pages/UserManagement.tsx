@@ -31,6 +31,8 @@ import {
   FormGroup,
   Switch,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -48,6 +50,8 @@ import { availablePermissions, generateMockUsers } from '../utils/mockData';
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>(generateMockUsers());
   const [openDialog, setOpenDialog] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<User>>({
@@ -202,6 +206,76 @@ const UserManagement: React.FC = () => {
     };
   }, [users]);
 
+  // Mobile card component for user display
+  const UserCard: React.FC<{ user: User }> = ({ user }) => (
+    <Card sx={{ mb: 2 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+            {user.firstName[0]}{user.lastName[0]}
+          </Avatar>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
+              {user.firstName} {user.lastName}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              @{user.username}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <Tooltip title="Edit">
+              <IconButton
+                size="small"
+                onClick={() => handleOpenDialog(user)}
+              >
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton
+                size="small"
+                color="error"
+                onClick={() => setDeleteConfirm(user.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+
+        <Box sx={{ mb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <EmailIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+            <Typography variant="body2" sx={{ wordBreak: 'break-all' }}>
+              {user.email}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+          <Chip
+            icon={getRoleIcon(user.role)}
+            label={user.role.toUpperCase()}
+            color={getRoleColor(user.role)}
+            size="small"
+          />
+          <Chip
+            label={user.isActive ? 'Active' : 'Inactive'}
+            color={user.isActive ? 'success' : 'default'}
+            size="small"
+          />
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <LoginIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+          <Typography variant="body2" color="text.secondary">
+            Last login: {user.lastLogin ? user.lastLogin.toLocaleDateString('en-US') : 'Never'}
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
@@ -299,95 +373,105 @@ const UserManagement: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             User List
           </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>User</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Last Access</TableCell>
-                  <TableCell align="center">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id} hover>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                          {user.firstName[0]}{user.lastName[0]}
-                        </Avatar>
-                        <Box>
-                          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                            {user.firstName} {user.lastName}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            @{user.username}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <EmailIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
-                        {user.email}
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={getRoleIcon(user.role)}
-                        label={user.role.toUpperCase()}
-                        color={getRoleColor(user.role)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={user.isActive ? 'Active' : 'Inactive'}
-                        color={user.isActive ? 'success' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {user.lastLogin ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <LoginIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
-                          <Typography variant="body2">
-                            {user.lastLogin.toLocaleDateString('en-US')}
-                          </Typography>
-                        </Box>
-                      ) : (
-                        <Typography variant="body2" color="text.secondary">
-                          Never
-                        </Typography>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip title="Edit">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleOpenDialog(user)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => setDeleteConfirm(user.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
+          {isMobile ? (
+            // Mobile card layout
+            <Box>
+              {users.map((user) => (
+                <UserCard key={user.id} user={user} />
+              ))}
+            </Box>
+          ) : (
+            // Desktop table layout
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+              <Table sx={{ minWidth: 600 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ minWidth: 200 }}>User</TableCell>
+                    <TableCell sx={{ minWidth: 200 }}>Email</TableCell>
+                    <TableCell sx={{ minWidth: 100 }}>Role</TableCell>
+                    <TableCell sx={{ minWidth: 100 }}>Status</TableCell>
+                    <TableCell sx={{ minWidth: 120 }}>Last Access</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 100 }}>Actions</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id} hover>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                            {user.firstName[0]}{user.lastName[0]}
+                          </Avatar>
+                          <Box>
+                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                              {user.firstName} {user.lastName}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              @{user.username}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <EmailIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+                          {user.email}
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          icon={getRoleIcon(user.role)}
+                          label={user.role.toUpperCase()}
+                          color={getRoleColor(user.role)}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={user.isActive ? 'Active' : 'Inactive'}
+                          color={user.isActive ? 'success' : 'default'}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {user.lastLogin ? (
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <LoginIcon sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+                            <Typography variant="body2">
+                              {user.lastLogin.toLocaleDateString('en-US')}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Typography variant="body2" color="text.secondary">
+                            Never
+                          </Typography>
+                        )}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Tooltip title="Edit">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleOpenDialog(user)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => setDeleteConfirm(user.id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </CardContent>
       </Card>
 
