@@ -29,7 +29,7 @@ import {
   CheckCircle as CheckIcon,
 } from '@mui/icons-material';
 import { User, UserRole } from '../types';
-import { availablePermissions } from '../utils/mockData';
+import { availablePermissions } from '../../../shared/lib/mockData';
 
 // Mock current user - in a real app this would come from authentication context
 const mockCurrentUser: User = {

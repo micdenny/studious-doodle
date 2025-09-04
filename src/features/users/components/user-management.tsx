@@ -45,7 +45,7 @@ import {
   Login as LoginIcon,
 } from '@mui/icons-material';
 import { User, UserRole } from '../types';
-import { availablePermissions, generateMockUsers } from '../utils/mockData';
+import { availablePermissions, generateMockUsers } from '../../../shared/lib/mockData';
 
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>(generateMockUsers());

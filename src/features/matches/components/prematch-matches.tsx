@@ -28,7 +28,7 @@ import {
   Edit,
   Visibility,
 } from '@mui/icons-material';
-import { generateMockMatches } from '../utils/mockData';
+import { generateMockMatches } from '../../../shared/lib/mockData';
 
 const PrematchMatches: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

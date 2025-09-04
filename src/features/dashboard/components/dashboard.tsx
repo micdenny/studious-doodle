@@ -15,7 +15,7 @@ import {
   AccountBalance,
   Warning,
 } from '@mui/icons-material';
-import { generateMockMatches, generateMockBets, generateDashboardStats } from '../utils/mockData';
+import { generateMockMatches, generateMockBets, generateDashboardStats } from '../../../shared/lib/mockData';
 
 const Dashboard: React.FC = () => {
   const { matches, stats } = useMemo(() => {

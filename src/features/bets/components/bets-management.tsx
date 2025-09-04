@@ -32,7 +32,7 @@ import {
   CheckCircle,
   Cancel,
 } from '@mui/icons-material';
-import { generateMockMatches, generateMockBets } from '../utils/mockData';
+import { generateMockMatches, generateMockBets } from '../../../shared/lib/mockData';
 
 const BetsManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

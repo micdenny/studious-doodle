@@ -1,4 +1,8 @@
-import { Match, Bet, RiskMetrics, DashboardStats, User, Permission } from '../types';
+import { Match } from '../../features/matches/types';
+import { Bet } from '../../features/bets/types';
+import { RiskMetrics } from '../../features/risk-management/types';
+import { DashboardStats } from '../../features/dashboard/types';
+import { User, Permission } from '../../features/users/types';
 
 const teams = [
   'Manchester United', 'Chelsea', 'Arsenal', 'Liverpool', 'Manchester City',
