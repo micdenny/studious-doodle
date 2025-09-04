@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Layout from './layout/Layout';
+import Layout from './layout/layout';
 import Dashboard from '../features/dashboard';
 import { LiveMatches, PrematchMatches } from '../features/matches';
 import BetsManagement from '../features/bets';

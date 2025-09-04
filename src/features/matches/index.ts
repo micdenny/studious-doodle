@@ -1,2 +1,2 @@
-export { default as LiveMatches } from './components/LiveMatches';
-export { default as PrematchMatches } from './components/PrematchMatches';
+export { default as LiveMatches } from './components/live-matches';
+export { default as PrematchMatches } from './components/prematch-matches';

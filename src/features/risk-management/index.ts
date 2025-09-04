@@ -1,1 +1,1 @@
-export { default } from './components/RiskManagement';
+export { default } from './components/risk-management';

@@ -1,1 +1,1 @@
-export { default } from './components/BetsManagement';
+export { default } from './components/bets-management';
