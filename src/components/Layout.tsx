@@ -27,6 +27,8 @@ import {
   SportsSoccer as SoccerIcon,
   DarkMode,
   LightMode,
+  People as UsersIcon,
+  AccountCircle as ProfileIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ColorModeContext } from '../App';
@@ -43,6 +45,11 @@ const menuItems = [
   { text: 'Prematch Matches', icon: <PrematchIcon />, path: '/prematch-matches' },
   { text: 'Bets Management', icon: <BetsIcon />, path: '/bets' },
   { text: 'Risk Management', icon: <RiskIcon />, path: '/risk-management' },
+  { text: 'User Management', icon: <UsersIcon />, path: '/users' },
+];
+
+const profileItems = [
+  { text: 'My Profile', icon: <ProfileIcon />, path: '/profile' },
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -94,6 +101,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           );
         })}
       </List>
+      
+      {/* Profile Section */}
+      <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 1 }}>
+        <List>
+          {profileItems.map((item) => {
+            const selected = location.pathname === item.path;
+            return (
+              <ListItem key={item.text} disablePadding>
+                <ListItemButton
+                  selected={selected}
+                  onClick={() => handleMenuClick(item.path)}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    primaryTypographyProps={{ fontWeight: selected ? 600 : 500 }}
+                  />
+                </ListItemButton>
+                </ListItem>
+            );
+          })}
+        </List>
+      </Box>
+      
       <Box sx={{ p: 2 }}>
         <MuiTooltip title={`Switch to ${theme.palette.mode === 'dark' ? 'light' : 'dark'} mode`}>
           <IconButton

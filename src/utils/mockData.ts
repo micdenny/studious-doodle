@@ -1,4 +1,4 @@
-import { Match, Bet, RiskMetrics, DashboardStats } from '../types';
+import { Match, Bet, RiskMetrics, DashboardStats, User, Permission } from '../types';
 
 const teams = [
   'Manchester United', 'Chelsea', 'Arsenal', 'Liverpool', 'Manchester City',
@@ -124,4 +124,61 @@ export const generateDashboardStats = (matches: Match[], bets: Bet[]): Dashboard
     totalProfit,
     riskLevel: totalProfit > totalStake * 0.1 ? 'low' : totalProfit > 0 ? 'medium' : 'high',
   };
+};
+
+export const availablePermissions: Permission[] = [
+  { id: 'dashboard_view', name: 'View Dashboard', description: 'Access to dashboard and analytics' },
+  { id: 'matches_view', name: 'View Matches', description: 'Access to live and prematch matches' },
+  { id: 'matches_manage', name: 'Manage Matches', description: 'Create, edit, and delete matches' },
+  { id: 'bets_view', name: 'View Bets', description: 'Access to bets management' },
+  { id: 'bets_manage', name: 'Manage Bets', description: 'Approve, reject, and modify bets' },
+  { id: 'risk_view', name: 'View Risk Management', description: 'Access to risk management tools' },
+  { id: 'risk_manage', name: 'Manage Risk', description: 'Configure risk settings and limits' },
+  { id: 'users_view', name: 'View Users', description: 'Access to user management' },
+  { id: 'users_manage', name: 'Manage Users', description: 'Create, edit, and delete users' },
+  { id: 'system_admin', name: 'System Administration', description: 'Full system administration access' },
+];
+
+export const generateMockUsers = (count: number = 15): User[] => {
+  const users: User[] = [];
+  const roles: User['role'][] = ['admin', 'user', 'guest'];
+  const firstNames = ['Marco', 'Giuseppe', 'Francesco', 'Antonio', 'Alessandro', 'Andrea', 'Matteo', 'Lorenzo', 'Gabriele', 'Stefano', 'Luca', 'Federico', 'Davide', 'Riccardo', 'Michele'];
+  const lastNames = ['Rossi', 'Bianchi', 'Verdi', 'Russo', 'Ferrari', 'Esposito', 'Ricci', 'Marino', 'Greco', 'Bruno', 'Gallo', 'Conti', 'Mancini', 'Costa', 'Giordano'];
+
+  for (let i = 0; i < count; i++) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const role = roles[Math.floor(Math.random() * roles.length)];
+    
+    let permissions: string[] = [];
+    switch (role) {
+      case 'admin':
+        permissions = availablePermissions.map(p => p.id);
+        break;
+      case 'user':
+        permissions = ['dashboard_view', 'matches_view', 'bets_view', 'risk_view'];
+        break;
+      case 'guest':
+        permissions = ['dashboard_view', 'matches_view'];
+        break;
+    }
+
+    const user: User = {
+      id: `user_${i + 1}`,
+      username: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@sportsbet.com`,
+      firstName,
+      lastName,
+      role,
+      permissions,
+      isActive: Math.random() > 0.1, // 90% active users
+      createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+      lastLogin: Math.random() > 0.2 ? new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000) : undefined,
+    };
+
+    users.push(user);
+  }
+
+  return users;
 };
