@@ -17,7 +17,7 @@ import {
   Stop,
   Warning,
 } from '@mui/icons-material';
-import { generateMockMatches } from '../utils/mockData';
+import { generateMockMatches } from '../../../shared/lib/mockData';
 import { Match } from '../types';
 
 const LiveMatches: React.FC = () => {

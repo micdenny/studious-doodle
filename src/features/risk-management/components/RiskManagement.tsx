@@ -26,7 +26,7 @@ import {
   MonetizationOn,
   Block,
 } from '@mui/icons-material';
-import { generateMockMatches, generateMockBets, generateRiskMetrics } from '../utils/mockData';
+import { generateMockMatches, generateMockBets, generateRiskMetrics } from '../../../shared/lib/mockData';
 
 const RiskManagement: React.FC = () => {
   const [matches] = useState(() => generateMockMatches(30));
